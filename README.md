@@ -16,7 +16,7 @@ Game code lives in `src/` and syncs into Roblox Studio with [Rojo](https://rojo.
 | `src/client` | `StarterPlayer.StarterPlayerScripts.Client` |
 
 ### First-time setup (Windows)
-1. Install [Rokit](https://github.com/rojo-rbx/rokit), then run `rokit install` in this folder to get the pinned Rojo version.
+1. Install [Aftman](https://github.com/LPGhatguy/aftman) (or Rokit), then run `aftman install` in this folder to get the pinned Rojo version.
 2. Run `rojo plugin install` to add the Rojo plugin to Roblox Studio.
 3. Open a Baseplate in Studio.
 

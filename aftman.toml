@@ -1,0 +1,4 @@
+# Toolchain pinned with Aftman (https://github.com/LPGhatguy/aftman).
+# Rokit reads this file too. Run `aftman install` in this folder.
+[tools]
+rojo = "rojo-rbx/rojo@7.7.1"
