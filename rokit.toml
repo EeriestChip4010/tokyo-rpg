@@ -1,0 +1,4 @@
+# Toolchain pinned with Rokit (https://github.com/rojo-rbx/rokit).
+# Run `rokit install` in this folder to get these exact versions.
+[tools]
+rojo = "rojo-rbx/rojo@7.4.4"

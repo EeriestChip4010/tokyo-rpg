@@ -4,3 +4,10 @@ vault/.obsidian/workspace-mobile.json
 vault/.obsidian/cache
 vault/.trash/
 .DS_Store
+
+# Roblox / Rojo
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+sourcemap.json
