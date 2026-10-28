@@ -61,6 +61,9 @@ local CombatConfig = {
 		Stunned = 4,
 	},
 
+	-- Seconds a fighter stays combat-tagged after hitting or being hit.
+	CombatTagDuration = 20,
+
 	-- Max remote calls a player may send per second before being ignored.
 	MaxActionsPerSecond = 20,
 }

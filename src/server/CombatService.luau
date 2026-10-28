@@ -155,6 +155,20 @@ local function isFacing(defender: BasePart, attacker: BasePart): boolean
 	return defender.CFrame.LookVector:Dot(toAttacker.Unit) > CombatConfig.Block.FrontAngleDot
 end
 
+-- Marks both fighters as in combat (shown as the HUD's combat tag). A PvP
+-- tag isn't downgraded to PvE while it's still active.
+local function tagCombat(attacker: Fighter, target: Fighter, t: number)
+	local kind = if attacker.isPlayer and target.isPlayer then "PvP" else "PvE"
+	local untilTime = t + CombatConfig.CombatTagDuration
+	for _, fighter in { attacker, target } do
+		local model = fighter.model
+		local current = model:GetAttribute("CombatTagUntil")
+		local stillPvP = model:GetAttribute("CombatTag") == "PvP" and typeof(current) == "number" and t < current
+		model:SetAttribute("CombatTag", if stillPvP then "PvP" else kind)
+		model:SetAttribute("CombatTagUntil", untilTime)
+	end
+end
+
 local function resolveHit(attacker: Fighter, target: Fighter, isFinisher: boolean, t: number)
 	local m1 = CombatConfig.M1
 	local block = CombatConfig.Block
@@ -162,6 +176,7 @@ local function resolveHit(attacker: Fighter, target: Fighter, isFinisher: boolea
 	if t < target.iFramesUntil then
 		return
 	end
+	tagCombat(attacker, target, t)
 
 	if target.blocking and isFacing(target.root, attacker.root) then
 		if t - target.blockStartedAt <= block.ParryWindow then

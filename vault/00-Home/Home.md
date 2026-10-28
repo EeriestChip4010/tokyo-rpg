@@ -28,6 +28,7 @@ The design hub for the game: a public multiplayer Roblox RPG in the Tokyo Ghoul 
 - [[Origins and Race Paths]]
 - [[Death and Permadeath]]
 - [[Feeding]]
+- [[HUD]]
 
 ## References (other games)
 - [[UI References]]: Deepwoken, Ghoul://Re and Tokyo:RE HUDs, stat screens and progression UI
