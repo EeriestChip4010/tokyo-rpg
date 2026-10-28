@@ -7,6 +7,7 @@
 | `01-Lore` | What the Tokyo Ghoul series says. No game mechanics here. |
 | `02-Design` | What our game does. Links back to lore notes to justify choices. |
 | `03-Roadmap` | Milestones, open questions, decisions |
+| `04-References` | How other games do it (UI, screens, systems), with screenshots and source links |
 | `Sources` | Raw research as it was collected, unedited |
 | `Templates` | Note templates (Obsidian core Templates plugin) |
 
