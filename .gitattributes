@@ -1,0 +1,8 @@
+# Normalize line endings so Windows editors (e.g. Obsidian) don't show
+# every touched note as changed.
+* text=auto
+*.md text eol=lf
+*.luau text eol=lf
+*.json text eol=lf
+*.rbxm binary
+*.rbxl binary
