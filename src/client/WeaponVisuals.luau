@@ -26,10 +26,13 @@ local WeaponModels = require(script.Parent.WeaponModels)
 local Palette = WeaponModels.Palette
 local rad = math.rad
 
-type TentacleParams = { pitch: number, yaw: number, roll: number, curl: number }
+-- Root angles plus one curl angle per joint, in degrees. Poses were tuned
+-- by previewing this exact math in tools/blender/preview_kagune_pose.py.
+type TentacleParams = { pitch: number, yaw: number, roll: number, curls: { number } }
 
 type Tentacle = {
 	side: number,
+	upper: boolean,
 	rest: TentacleParams,
 	root: Motor6D,
 	joints: { Motor6D },
@@ -67,8 +70,20 @@ type State = {
 
 local states: { [Model]: State } = {}
 
--- Forward curl of each tentacle joint at rest, in degrees (root to tip).
-local REST_CURL = { -8, -12, -14, -12, -8 }
+-- Rest: the four tails fan up and back in a smooth S-curve, tips about
+-- 1.8 studs above the head. Negative curl bends a joint forward.
+local REST_CURL = { -6, 20, 13, -30, -30 }
+local REST = {
+	upper = { pitch = 55, roll = -20, curlScale = 1 },
+	lower = { pitch = 55, roll = -30, curlScale = 0.75 },
+}
+-- Strike: all four tips converge about 7 studs ahead at chest height, the
+-- upper pair past the shoulders and the lower pair round the flanks. Yaw and
+-- roll are for the right side and mirrored for the left.
+local STRIKE = {
+	upper = { pitch = -49.7, yaw = 46.4, roll = -48.6, curls = { 5.4, -6.9, -39.3, -33.5, -1.0 } },
+	lower = { pitch = 24.4, yaw = 53.3, roll = -101.4, curls = { -22.9, -6.9, -31.1, -25.9, 0.4 } },
+}
 local SWAY_DEGREES = 6
 local SWAY_SPEED = 2.2
 
@@ -98,12 +113,24 @@ local function lerp(a: number, b: number, t: number): number
 end
 
 local function lerpParams(a: TentacleParams, b: TentacleParams, t: number): TentacleParams
+	local curls = table.create(#a.curls)
+	for k, curl in a.curls do
+		curls[k] = lerp(curl, b.curls[k], t)
+	end
 	return {
 		pitch = lerp(a.pitch, b.pitch, t),
 		yaw = lerp(a.yaw, b.yaw, t),
 		roll = lerp(a.roll, b.roll, t),
-		curl = lerp(a.curl, b.curl, t),
+		curls = curls,
 	}
+end
+
+local function scaleCurls(curls: { number }, factor: number): { number }
+	local scaled = table.create(#curls)
+	for k, curl in curls do
+		scaled[k] = curl * factor
+	end
+	return scaled
 end
 
 local function joint(part0: BasePart, part1: BasePart, c0: CFrame, c1: CFrame): Motor6D
@@ -197,18 +224,21 @@ local function buildKagune(character: Model): KaguneRig?
 			table.insert(joints, joint(pieces[k], pieces[k + 1], c0, offsets[k + 1]:Inverse()))
 		end
 
+		local rest = if socket.upper then REST.upper else REST.lower
 		table.insert(tentacles, {
 			side = socket.side,
+			upper = socket.upper,
 			rest = {
-				pitch = if socket.upper then 25 else 45,
+				pitch = rest.pitch,
 				yaw = 0,
-				roll = socket.side * (if socket.upper then -20 else -45),
-				curl = 1,
+				roll = socket.side * rest.roll,
+				curls = scaleCurls(REST_CURL, rest.curlScale),
 			},
 			root = root,
 			joints = joints,
 			pieces = pieces,
-			phase = index * 1.3,
+			-- A quarter cycle apart, so the tails never sway in lockstep.
+			phase = (index - 1) * 0.25 * 2 * math.pi,
 		})
 	end
 
@@ -285,46 +315,66 @@ local function buildQuinque(character: Model): QuinqueRig?
 	}
 end
 
+-- The converging strike for this tail, nudged by `yawOffset` (sweeps) and
+-- `pitchOffset` (slams), with its curls scaled by `curlScale` (wraps).
+local function strikeFor(
+	tentacle: Tentacle,
+	yawOffset: number?,
+	pitchOffset: number?,
+	curlScale: number?
+): TentacleParams
+	local strike = if tentacle.upper then STRIKE.upper else STRIKE.lower
+	return {
+		pitch = strike.pitch + (pitchOffset or 0),
+		yaw = tentacle.side * strike.yaw + (yawOffset or 0),
+		roll = tentacle.side * strike.roll,
+		curls = scaleCurls(strike.curls, curlScale or 1),
+	}
+end
+
+-- Pulled back and coiled, ready to lash out.
+local function coiled(tentacle: Tentacle): TentacleParams
+	local rest = tentacle.rest
+	return { pitch = rest.pitch + 15, yaw = rest.yaw, roll = rest.roll, curls = scaleCurls(rest.curls, 1.5) }
+end
+
 -- Per-attack tentacle choreography: which tentacles move and how.
 type Choreo = {
-	tentacles: { number }?, -- nil = all
-	windup: TentacleParams,
-	strike: TentacleParams,
+	tentacles: { number }?, -- nil = all; 1/3 are the right tails, 2/4 the left
+	windup: (Tentacle) -> TentacleParams,
+	strike: (Tentacle) -> TentacleParams,
 	stagger: number?, -- seconds between tentacles (barrage)
 }
 
 local CHOREO: { [string]: Choreo } = {
-	KaguneStrikeR = {
-		tentacles = { 1, 3 },
-		windup = { pitch = 70, yaw = 10, roll = -10, curl = 2.2 },
-		strike = { pitch = -88, yaw = 8, roll = 0, curl = 0 },
-	},
-	KaguneStrikeL = {
-		tentacles = { 2, 4 },
-		windup = { pitch = 70, yaw = -10, roll = 10, curl = 2.2 },
-		strike = { pitch = -88, yaw = -8, roll = 0, curl = 0 },
-	},
+	KaguneStrikeR = { tentacles = { 1, 3 }, windup = coiled, strike = strikeFor },
+	KaguneStrikeL = { tentacles = { 2, 4 }, windup = coiled, strike = strikeFor },
 	KaguneSweep = {
-		windup = { pitch = -80, yaw = 75, roll = 0, curl = 0.4 },
-		strike = { pitch = -80, yaw = -75, roll = 0, curl = 0.2 },
+		windup = function(tentacle)
+			return strikeFor(tentacle, 45)
+		end,
+		strike = function(tentacle)
+			return strikeFor(tentacle, -45)
+		end,
 	},
 	KaguneSlam = {
-		windup = { pitch = -5, yaw = 0, roll = 0, curl = -0.6 },
-		strike = { pitch = -125, yaw = 0, roll = 0, curl = 0.5 },
+		windup = function(tentacle)
+			local rest = tentacle.rest
+			return { pitch = rest.pitch - 30, yaw = rest.yaw, roll = rest.roll, curls = scaleCurls(rest.curls, 0.4) }
+		end,
+		strike = function(tentacle)
+			return strikeFor(tentacle, 0, -25)
+		end,
 	},
-	KaguneBarrage = {
-		windup = { pitch = 65, yaw = 0, roll = 0, curl = 2 },
-		strike = { pitch = -90, yaw = 0, roll = 0, curl = 0 },
-		stagger = 0.12,
-	},
+	KaguneBarrage = { windup = coiled, strike = strikeFor, stagger = 0.12 },
 	KaguneGrab = {
 		tentacles = { 1, 2 },
-		windup = { pitch = 55, yaw = 0, roll = 0, curl = 2 },
-		strike = { pitch = -85, yaw = 0, roll = 0, curl = 1.6 },
+		windup = coiled,
+		strike = function(tentacle)
+			return strikeFor(tentacle, 0, 0, 1.3)
+		end,
 	},
 }
-
-local BLOCK_PARAMS: TentacleParams = { pitch = -70, yaw = 0, roll = 0, curl = 1.4 }
 
 local function tentacleTarget(character: Model, tentacle: Tentacle, index: number, t: number): TentacleParams
 	local attack = CharacterAnimator.getAttack(character)
@@ -337,17 +387,18 @@ local function tentacleTarget(character: Model, tentacle: Tentacle, index: numbe
 			-- Barrage: each tentacle stabs once in turn during the strike window.
 			strikeEnd = windupEnd + 0.1
 		end
+		local windup = choreo.windup(tentacle)
+		local strike = choreo.strike(tentacle)
 		if t < windupEnd then
-			return lerpParams(tentacle.rest, choreo.windup, easeOut(span(t, attack.startedAt, windupEnd)))
+			return lerpParams(tentacle.rest, windup, easeOut(span(t, attack.startedAt, windupEnd)))
 		elseif t < strikeEnd then
-			return lerpParams(choreo.windup, choreo.strike, easeOut(span(t, windupEnd, strikeEnd)))
+			return lerpParams(windup, strike, easeOut(span(t, windupEnd, strikeEnd)))
 		end
-		return lerpParams(choreo.strike, tentacle.rest, easeOut(span(t, strikeEnd, attack.endsAt)))
+		return lerpParams(strike, tentacle.rest, easeOut(span(t, strikeEnd, attack.endsAt)))
 	end
 	if character:GetAttribute("Blocking") == true then
-		local block = table.clone(BLOCK_PARAMS)
-		block.yaw = -tentacle.side * (if index <= 2 then 20 else 45)
-		return block
+		-- A wall of tails curled in close in front of the body.
+		return strikeFor(tentacle, 0, 10, 1.6)
 	end
 	return tentacle.rest
 end
@@ -374,7 +425,7 @@ local function animateKagune(state: State, rig: KaguneRig, t: number, dt: number
 		for k, motor in tentacle.joints do
 			local sway = math.sin(t * SWAY_SPEED + tentacle.phase + k * 0.6) * SWAY_DEGREES
 			local swaySide = math.cos(t * SWAY_SPEED * 0.7 + tentacle.phase + k) * SWAY_DEGREES * 0.6
-			motor.Transform = CFrame.Angles(rad(REST_CURL[k] * params.curl + sway), 0, rad(swaySide))
+			motor.Transform = CFrame.Angles(rad(params.curls[k] + sway), 0, rad(swaySide))
 		end
 	end
 end

@@ -21,17 +21,18 @@
       "RinkakuTip"
     ],
     "joint_lengths": [
+      2.0,
+      1.8,
+      1.7,
+      1.5,
       1.3,
-      1.2,
-      1.1,
-      1.0,
-      0.9,
-      0.6
+      0.9
     ],
-    "total_tentacle_length": 6.1,
-    "curl": "rotate each joint about the piece's local X by a negative angle (CFrame.Angles(-a,0,0)) to curl with spines outside",
-    "emissive": "textures/kagune_rinkaku_emissive.png is a greyscale glow mask; tint #FF3B3B, strength ~0.25",
-    "triangles_total": 3444,
+    "total_tentacle_length": 9.2,
+    "curl": "rotate each joint about the piece's local X by a negative angle (CFrame.Angles(-a,0,0)) to curl with the dorsal ridge outside",
+    "version": "v3: long (9.2), fleshy, smooth wet muscle, no spikes",
+    "emissive": "textures/kagune_rinkaku_emissive.png is a greyscale glow mask; tint #FF3B3B, strength ~0.25 (veins + root mass)",
+    "triangles_total": 4264,
     "objects": {
       "RinkakuSeg1": {
         "file": [
@@ -39,16 +40,16 @@
           "models/kagune_rinkaku.obj"
         ],
         "bbox_size": {
-          "x": 0.6,
-          "y": 1.775,
-          "z": 0.63
+          "x": 0.806,
+          "y": 2.723,
+          "z": 0.759
         },
         "bboxCenterFromOrigin": {
-          "x": 0.0,
-          "y": 0.638,
-          "z": 0.075
+          "x": -0.006,
+          "y": 1.001,
+          "z": 0.013
         },
-        "triangles": 576,
+        "triangles": 756,
         "textures": {
           "albedo": "textures/kagune_rinkaku_albedo.png",
           "roughness": "textures/kagune_rinkaku_roughness.png",
@@ -56,16 +57,16 @@
           "emissive": "textures/kagune_rinkaku_emissive.png",
           "normal": "textures/kagune_rinkaku_normal.png"
         },
-        "pivot": "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side",
-        "joint_length": 1.3,
-        "base_diameter": 0.5,
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 2.0,
+        "base_diameter": 0.72,
         "bakedBend": "none (straight along +Y)",
         "top_joint": [
           0,
-          1.3,
+          2.0,
           0
         ],
-        "top_diameter": 0.451
+        "top_diameter": 0.725
       },
       "RinkakuSeg2": {
         "file": [
@@ -73,16 +74,16 @@
           "models/kagune_rinkaku.obj"
         ],
         "bbox_size": {
-          "x": 0.541,
-          "y": 1.605,
-          "z": 0.54
+          "x": 0.762,
+          "y": 2.48,
+          "z": 0.703
         },
         "bboxCenterFromOrigin": {
           "x": 0.0,
-          "y": 0.577,
-          "z": 0.053
+          "y": 0.877,
+          "z": 0.01
         },
-        "triangles": 576,
+        "triangles": 700,
         "textures": {
           "albedo": "textures/kagune_rinkaku_albedo.png",
           "roughness": "textures/kagune_rinkaku_roughness.png",
@@ -90,16 +91,16 @@
           "emissive": "textures/kagune_rinkaku_emissive.png",
           "normal": "textures/kagune_rinkaku_normal.png"
         },
-        "pivot": "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side",
-        "joint_length": 1.2,
-        "base_diameter": 0.451,
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.8,
+        "base_diameter": 0.725,
         "bakedBend": "none (straight along +Y)",
         "top_joint": [
           0,
-          1.2,
+          1.8,
           0
         ],
-        "top_diameter": 0.359
+        "top_diameter": 0.635
       },
       "RinkakuSeg3": {
         "file": [
@@ -107,16 +108,16 @@
           "models/kagune_rinkaku.obj"
         ],
         "bbox_size": {
-          "x": 0.431,
-          "y": 1.42,
-          "z": 0.432
+          "x": 0.666,
+          "y": 2.267,
+          "z": 0.598
         },
         "bboxCenterFromOrigin": {
           "x": 0.0,
-          "y": 0.53,
-          "z": 0.044
+          "y": 0.816,
+          "z": 0.0
         },
-        "triangles": 576,
+        "triangles": 672,
         "textures": {
           "albedo": "textures/kagune_rinkaku_albedo.png",
           "roughness": "textures/kagune_rinkaku_roughness.png",
@@ -124,16 +125,16 @@
           "emissive": "textures/kagune_rinkaku_emissive.png",
           "normal": "textures/kagune_rinkaku_normal.png"
         },
-        "pivot": "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side",
-        "joint_length": 1.1,
-        "base_diameter": 0.359,
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.7,
+        "base_diameter": 0.635,
         "bakedBend": "none (straight along +Y)",
         "top_joint": [
           0,
-          1.1,
+          1.7,
           0
         ],
-        "top_diameter": 0.28
+        "top_diameter": 0.5
       },
       "RinkakuSeg4": {
         "file": [
@@ -141,16 +142,16 @@
           "models/kagune_rinkaku.obj"
         ],
         "bbox_size": {
-          "x": 0.336,
-          "y": 1.241,
-          "z": 0.34
+          "x": 0.525,
+          "y": 1.943,
+          "z": 0.484
         },
         "bboxCenterFromOrigin": {
           "x": 0.0,
-          "y": 0.48,
-          "z": 0.035
+          "y": 0.722,
+          "z": 0.007
         },
-        "triangles": 440,
+        "triangles": 616,
         "textures": {
           "albedo": "textures/kagune_rinkaku_albedo.png",
           "roughness": "textures/kagune_rinkaku_roughness.png",
@@ -158,16 +159,16 @@
           "emissive": "textures/kagune_rinkaku_emissive.png",
           "normal": "textures/kagune_rinkaku_normal.png"
         },
-        "pivot": "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side",
-        "joint_length": 1.0,
-        "base_diameter": 0.28,
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.5,
+        "base_diameter": 0.5,
         "bakedBend": "none (straight along +Y)",
         "top_joint": [
           0,
-          1.0,
+          1.5,
           0
         ],
-        "top_diameter": 0.202
+        "top_diameter": 0.387
       },
       "RinkakuSeg5": {
         "file": [
@@ -175,16 +176,16 @@
           "models/kagune_rinkaku.obj"
         ],
         "bbox_size": {
-          "x": 0.242,
-          "y": 1.066,
-          "z": 0.23
+          "x": 0.406,
+          "y": 1.643,
+          "z": 0.364
         },
         "bboxCenterFromOrigin": {
           "x": 0.0,
-          "y": 0.432,
-          "z": 0.018
+          "y": 0.628,
+          "z": -0.0
         },
-        "triangles": 440,
+        "triangles": 560,
         "textures": {
           "albedo": "textures/kagune_rinkaku_albedo.png",
           "roughness": "textures/kagune_rinkaku_roughness.png",
@@ -192,16 +193,16 @@
           "emissive": "textures/kagune_rinkaku_emissive.png",
           "normal": "textures/kagune_rinkaku_normal.png"
         },
-        "pivot": "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side",
-        "joint_length": 0.9,
-        "base_diameter": 0.202,
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.3,
+        "base_diameter": 0.387,
         "bakedBend": "none (straight along +Y)",
         "top_joint": [
           0,
-          0.9,
+          1.3,
           0
         ],
-        "top_diameter": 0.13
+        "top_diameter": 0.3
       },
       "RinkakuTip": {
         "file": [
@@ -209,16 +210,16 @@
           "models/kagune_rinkaku.obj"
         ],
         "bbox_size": {
-          "x": 0.169,
-          "y": 0.665,
-          "z": 0.162
+          "x": 0.316,
+          "y": 1.05,
+          "z": 0.296
         },
         "bboxCenterFromOrigin": {
           "x": 0.0,
-          "y": 0.268,
-          "z": 0.013
+          "y": 0.375,
+          "z": 0.007
         },
-        "triangles": 352,
+        "triangles": 476,
         "textures": {
           "albedo": "textures/kagune_rinkaku_albedo.png",
           "roughness": "textures/kagune_rinkaku_roughness.png",
@@ -226,14 +227,14 @@
           "emissive": "textures/kagune_rinkaku_emissive.png",
           "normal": "textures/kagune_rinkaku_normal.png"
         },
-        "pivot": "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side",
-        "joint_length": 0.6,
-        "base_diameter": 0.13,
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 0.9,
+        "base_diameter": 0.3,
         "bakedBend": "point hooked ~10 deg toward -Z (ventral/inner side of the curl)",
         "point_at": [
           0,
-          0.6,
-          -0.054
+          0.9,
+          -0.081
         ]
       },
       "Kakuhou": {

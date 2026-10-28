@@ -1,18 +1,20 @@
-"""Rinkaku kagune (Kaneki Ken, 4 tails) -> assets/models/kagune_rinkaku.{fbx,obj}
+"""Rinkaku kagune v3 (Kaneki Ken, 4 tails: long, smooth, fleshy) -> assets/models/kagune_rinkaku.{fbx,obj}
 
 Run:  /home/claude/blender-venv/bin/python tools/blender/build_kagune.py [--no-render]
 
 Objects (ROBLOX axes in the exported file; Blender Z = Roblox Y, Blender -Y = Roblox +Z):
   RinkakuSeg1..RinkakuSeg5, RinkakuTip
-      Modelled along +Y.  Origin = base joint, top joint at (0, L, 0).  Both ends are
-      domes centred on the joint with the joint radius, so consecutive pieces stay closed
-      when bent.  Oval section (X wide, Z flatter).  The dorsal keel + jagged spines are on
-      piece-local +Z ("outside"); curl the chain toward -Z, i.e. joint rotation
-      CFrame.Angles(-a, 0, 0), to keep the spines on the outside of the curve.
+      Modelled along +Y.  Origin = base joint, top joint at (0, L, 0).  The top end is a
+      dome centred on the joint (joint radius); the base end has a soft muscle collar that
+      sleeves over the previous piece, so consecutive pieces stay closed when bent 25-35 deg.
+      Near-round section with a soft low dorsal ridge on piece-local +Z; curl the chain
+      toward -Z (CFrame.Angles(-a, 0, 0)) to keep that ridge on the outside of the curve.
   Kakuhou
       Fleshy root mass for the lower back, origin at its centre; visible face points
       Roblox +Z (the character's back), flat side -Z rests on the torso.  Four socket
       points (position + outward direction) are written to the manifest.
+v3 (user feedback): ~1.5x longer (9.2 studs), thicker (0.60 root), smooth wet muscle with
+lengthwise fibre striations and veins instead of scale bands, no spikes.
 """
 import sys
 import os
@@ -26,23 +28,25 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as C  # noqa: E402
 
 ASSET = "kagune_rinkaku"
-SIDES = 12
-FLAT = 0.8                      # oval section 1.0 (X) : 0.8 (front/back)
+SIDES = 14
+FLAT = 0.92                     # nearly round section (X : front/back)
+STEP = 0.10                     # ring spacing along the tentacle (studs)
 
-SEG_LEN = [1.30, 1.20, 1.10, 1.00, 0.90]
-TIP_LEN = 0.60
-BANDS = [3, 3, 3, 2, 2, 1]      # 14 overlapping scale bands along the tentacle
+SEG_LEN = [2.0, 1.8, 1.7, 1.5, 1.3]
+TIP_LEN = 0.90
 TOTAL = sum(SEG_LEN) + TIP_LEN
 STARTS = [sum(SEG_LEN[:i]) for i in range(6)]          # arclength at each piece's base
 
-# brief: diameter 0.50 root, bulge at ~15%, 0.40 @25%, 0.28 @60%, 0.12 @90%, point
-PROFILE = [(0.0, 0.50), (0.15, 0.52), (0.25, 0.42), (0.60, 0.28), (0.90, 0.13), (1.0, 0.09)]
+# diameter along the tentacle (fraction of length -> studs): muscular belly near the root,
+# long gradual taper, spear point on the tip piece
+PROFILE = [(0.0, 0.72), (0.10, 0.78), (0.35, 0.66), (0.60, 0.50), (0.85, 0.34), (0.902, 0.30), (1.0, 0.16)]
 
+# deeper, wet reds; root-bright -> tip-dark (canon read)
+RC_ROOT, RC_MIDV3, RC_TIP = "#C0162A", "#7E0C18", "#3A040B"
 RC_BRIGHT, RC_MID, RC_DARK, RC_GLOW = "#D21F2B", "#9E1220", "#4A060E", "#FF3B3B"
-RC_LIP, VEIN = "#E2414B", "#2A0206"
-RC_MID_DEEP = "#8A0F1B"   # Seg4-5: one step darker than RC_MID so the darkening reads in-game
+RC_COLLAR, VEIN = "#D23440", "#3A0410"
 
-# Kakuhou sockets, Blender local coords of the kakuhou (brief: upper +-0.30 @ +0.10, lower +-0.55 @ -0.10)
+# Kakuhou sockets, Blender local coords of the kakuhou (upper +-0.30 @ +0.10, lower +-0.55 @ -0.10)
 SOCKETS = {
     "UpperRight": (Vector((0.30, -0.10, 0.10)), Vector((0.35, -1.0, 0.60))),
     "UpperLeft": (Vector((-0.30, -0.10, 0.10)), Vector((-0.35, -1.0, 0.60))),
@@ -76,34 +80,14 @@ def dome(r, z0, direction, steps=3):
         a = (math.pi / 2) * (k / steps)
         rings.append([section(r * math.cos(a), 2 * math.pi * i / SIDES) + Vector((0, 0, z0 + direction * r * math.sin(a)))
                       for i in range(SIDES)])
-    rings.append([Vector((0, 0, z0 + direction * r * FLAT ** 0.0))])
+    rings.append([Vector((0, 0, z0 + direction * r))])
     return rings
 
 
-def keel(theta, r):
-    """Raised dorsal keel on the -Y (Blender) side = piece-local Roblox +Z."""
+def ridge(theta, r):
+    """Soft, low dorsal ridge on the -Y (Blender) side = piece-local Roblox +Z."""
     d = abs(((theta - (-math.pi / 2)) + math.pi) % (2 * math.pi) - math.pi)
-    return 0.06 * (r / 0.25) * math.exp(-(d / 0.32) ** 2)
-
-
-def add_spine(bm, z0, z1, r_surface, h, rake):
-    """Jagged two-tooth spine on the dorsal ridge, raked toward +Z (tip)."""
-    w = max(0.012, 0.11 * h + 0.008)
-    base_y = -(r_surface * FLAT) + 0.02          # slightly sunk into the surface
-    prof = [(z0, 0.0), (z0 + 0.35 * (z1 - z0), 0.5 * h), (z0 + 0.5 * (z1 - z0), 0.36 * h),
-            (z1 + rake, h), (z1, 0.0)]
-    left = [bm.verts.new((-w, base_y - y, z)) for z, y in prof]
-    right = [bm.verts.new((w, base_y - y, z)) for z, y in prof]
-    # tips of teeth are knife-thin
-    for i in (1, 3):
-        left[i].co.x *= 0.25
-        right[i].co.x *= 0.25
-    bm.faces.new(list(reversed(left)))
-    bm.faces.new(right)
-    n = len(prof)
-    for i in range(n):
-        j = (i + 1) % n
-        bm.faces.new((left[i], left[j], right[j], right[i]))
+    return 0.035 * (r / 0.3) * math.exp(-(d / 0.55) ** 2)
 
 
 def piece(idx):
@@ -113,27 +97,26 @@ def piece(idx):
     s1 = (STARTS[idx] + L) / TOTAL
     r0 = diameter(s0) / 2
     r1 = diameter(s1) / 2
-    nb = BANDS[idx]
     rnd = random.Random(idx * 11 + 3)
-    twist = rnd.uniform(-0.4, 0.4)
+    ph = rnd.uniform(0, math.tau)
+    off = Vector((rnd.uniform(0, 50), rnd.uniform(0, 50), rnd.uniform(0, 50)))
+    twist = rnd.uniform(0.8, 1.4)
     rings = []
-    # proximal end: hidden spherical cap centred on the joint, then a flared collar that
-    # sleeves ~0.15 over the previous piece's end (hides the kink when bent)
+    # proximal end: hidden spherical cap centred on the joint, then a soft muscle collar
+    # that sleeves ~0.15 over the previous piece's end (hides the crease when bent)
     Ls = min(0.15, 0.8 * r0)
     rings.append([Vector((0, 0, -r0))])
     a_l = math.asin(Ls / r0)
     for a in (a_l + (math.pi / 2 - a_l) * 0.5, a_l):
         rings.append([section(r0 * math.cos(a), 2 * math.pi * i / SIDES) + Vector((0, 0, -r0 * math.sin(a)))
                       for i in range(SIDES)])
-    for z, k in ((-Ls, 1.2), (-0.4 * Ls, 1.17), (0.35 * Ls, 1.1)):
+    for z, k in ((-Ls, 1.0), (-0.7 * Ls, 1.05), (-0.1 * Ls, 1.05), (0.6 * Ls, 1.025)):
         rings.append([section(r0 * k, 2 * math.pi * i / SIDES) + Vector((0, 0, z)) for i in range(SIDES)])
-    us = [0.0, 0.3, 0.6, 0.84, 0.93]
-    zs = [(b + u) / nb * L for b in range(nb) for u in us]
+    n = max(4, round(L / STEP))
+    zs = [L * k / n for k in range(n + 1)]
     if is_tip:
-        zs = [z * 0.45 for z in zs] + [L * t for t in (0.55, 0.68, 0.8, 0.9, 0.97)]
-    else:
-        zs.append(L)
-    zs = [z for z in zs if z > 0.75 * Ls]
+        zs = [L * t for t in (0.0, 0.08, 0.16, 0.25, 0.34, 0.43, 0.52, 0.61, 0.7, 0.78, 0.86, 0.93, 0.98)]
+    zs = [z for z in zs if z > 1.0 * Ls]
     for z in zs:
         t = z / L
         s = s0 + (s1 - s0) * t
@@ -141,52 +124,40 @@ def piece(idx):
         cy = 0.0
         flat = FLAT
         if is_tip:
-            band_t = min(t / 0.45, 1.0)
-            u = (band_t * nb) % 1.0 if t < 0.45 else 0.0
-            # spear point: hold radius, then taper to the point, hooked 10 deg toward ventral (+Y)
-            r = r0 * (1.08 * math.sin(math.pi * 0.5 * min(t / 0.3, 1)) * 0.25 + 0.9) if t < 0.45 else \
-                r0 * 1.05 * ((1 - t) / 0.55) ** 0.85
+            # spear point: hold the radius, then taper to a sharp point hooked ~10 deg ventral (+Y)
+            r = r0 * (1.0 + 0.06 * math.sin(math.pi * min(t / 0.4, 1))) if t < 0.4 else \
+                r0 * ((1 - t) / 0.6) ** 0.8
             cy = 0.09 * L * smoothstep(0.35, 1.0, t) ** 2
-            flat = FLAT - 0.25 * smoothstep(0.45, 1.0, t)
-            fade = smoothstep(0.0, 0.15, t) * (1 - smoothstep(0.4, 0.45, t))
+            flat = FLAT - 0.3 * smoothstep(0.45, 1.0, t)
+            fade = smoothstep(0.0, 0.2, t) * (1 - smoothstep(0.35, 0.6, t))
         else:
-            u = (t * nb) % 1.0 if t < 1 - 1e-6 else 0.0
-            fade = smoothstep(0.0, 0.1, t) * smoothstep(0.0, 0.1, 1 - t)
-        bulge = 0.11 * (u ** 1.6) if u < 0.95 else 0.0
+            fade = smoothstep(0.0, 0.12, t) * smoothstep(0.0, 0.1, 1 - t)
+        # soft muscle swelling: long smooth bulges + uneven organic noise
+        swell = 0.035 * math.sin(2 * math.pi * z / 1.4 + ph) + 0.012 * math.sin(2 * math.pi * z / 0.65 + 2 * ph)
         ring = []
         for i in range(SIDES):
             th = 2 * math.pi * i / SIDES
-            rib = 0.03 * math.cos(4 * th + twist * z * 3)
-            rr = r * (1 + fade * (bulge + rib)) + fade * keel(th, r)
+            bundle = 0.025 * math.cos(3 * th + twist * z * 2.2)     # spiralling muscle bundles
+            p = section(r, th, flat) + Vector((0, 0, z))
+            lump = 0.05 * noise.noise(p * 3.0 + off)
+            rr = r * (1 + fade * (swell + bundle + lump)) + fade * ridge(th, r)
             if is_tip and t > 0.45:
-                rr *= 1 + 0.18 * smoothstep(0.5, 1.0, t) * abs(math.cos(th)) ** 6  # side edges
+                rr *= 1 + 0.14 * smoothstep(0.5, 1.0, t) * abs(math.cos(th)) ** 6  # spear edges
             ring.append(section(rr, th, flat, cy) + Vector((0, 0, z)))
         rings.append(ring)
     if is_tip:
         rings.append([Vector((0, 0.09 * L, L))])
     else:
-        td = dome(r1, L, +1)
-        rings += td
+        rings += dome(r1, L, +1)
     bm = bmesh.new()
     C.loft(bm, rings, cap_start=None, cap_end=None)
-    # one spine per band on the dorsal ridge, 0.10 tall at the root shrinking to 0.03
-    span = L * (0.45 if is_tip else 1.0)
-    for b in range(nb):
-        za = (b + 0.30) / nb * span
-        zb = (b + 0.86) / nb * span
-        s = s0 + (s1 - s0) * ((za + zb) / 2 / L)
-        h = 0.14 - 0.10 * s
-        rs = diameter(s) / 2 * (1.06) + keel(-math.pi / 2, diameter(s) / 2) / FLAT
-        add_spine(bm, za, zb, rs, h, rake=0.58 * h)
     name = "RinkakuTip" if is_tip else f"RinkakuSeg{idx + 1}"
     ob = C.obj_from_bmesh(name, bm)
     C.clean_mesh(ob)
-    C.set_smooth(ob, 35 if is_tip else 50)
+    C.set_smooth(ob, 60)
     ob["fleshy"] = 0.0
     ob["collar"] = Ls
-    ob["s0"], ob["s1"], ob["L"], ob["bands"] = s0, s1, L, float(nb)
-    if is_tip:
-        ob["bands"] = float(nb) / 0.45   # band coordinate covers only the first 45% of the tip
+    ob["s0"], ob["s1"], ob["L"] = s0, s1, L
     return ob, L, r0 * 2, r1 * 2
 
 
@@ -219,62 +190,56 @@ def build_material():
     mb = C.MatBuilder("RinkakuMat")
     co = mb.coord("Object")
     attr = lambda n: mb.node("ShaderNodeAttribute", attribute_type='OBJECT', attribute_name=n).outputs["Fac"]
-    fle, s0, s1, L, nb = attr("fleshy"), attr("s0"), attr("s1"), attr("L"), attr("bands")
+    fle, s0, s1, L = attr("fleshy"), attr("s0"), attr("s1"), attr("L")
     xyz = mb.sep(co)
     tl = mb.math('DIVIDE', xyz[2], L)
     tl = mb.math('MINIMUM', mb.math('MAXIMUM', tl, 0.0), 1.0)
     s = mb.math('ADD', s0, mb.math('MULTIPLY', tl, mb.math('SUBTRACT', s1, s0)))
-    # canon gradient: bright at the root, darker toward the tips
-    # Seg1-3 RC_BRIGHT, Seg4-5 RC_MID, tip RC_DARK (s: 0.59 = Seg4 start, 0.90 = tip start)
-    grad = mb.ramp(s, [(0.0, C.hexlin(RC_BRIGHT)), (0.50, C.hexlin(RC_BRIGHT)),
-                       (0.62, C.hexlin(RC_MID_DEEP)), (0.86, C.hexlin(RC_MID_DEEP)),
-                       (0.93, C.hexlin(RC_DARK)), (1.0, C.hexlin(RC_DARK))]).outputs[0]
-    # band coordinate (matches the geometric scale bands)
-    u = mb.math('FRACT', mb.math('MULTIPLY', tl, nb))
-    lip = mb.math('MULTIPLY', mb.math('SMOOTHSTEP' if False else 'GREATER_THAN', u, 0.62), 1.0)
-    lipf = mb.node("ShaderNodeMapRange", interpolation_type='SMOOTHSTEP')
-    mb.link(u, lipf.inputs["Value"])
-    lipf.inputs["From Min"].default_value = 0.55
-    lipf.inputs["From Max"].default_value = 0.92
-    lip = lipf.outputs[0]
-    seamf = mb.node("ShaderNodeMapRange", interpolation_type='SMOOTHSTEP')
-    mb.link(u, seamf.inputs["Value"])
-    seamf.inputs["From Min"].default_value = 0.935
-    seamf.inputs["From Max"].default_value = 0.965
-    seam = mb.math('MULTIPLY', seamf.outputs[0], mb.math('LESS_THAN', tl, 0.999))
+    # canon gradient, deeper reds: bright root -> dark tip
+    # continuous across the Seg5 -> tip seam (s=0.902): RC_MIDV3 on both sides, the dark
+    # colour only in the last third of the tip
+    grad = mb.ramp(s, [(0.0, C.hexlin(RC_ROOT)), (0.35, C.hexlin(RC_ROOT)),
+                       (0.70, C.hexlin(RC_MIDV3)), (0.935, C.hexlin(RC_MIDV3)),
+                       (0.975, C.hexlin(RC_TIP)), (1.0, C.hexlin(RC_TIP))]).outputs[0]
+    # lengthwise muscle-fibre striations (noise stretched along the tentacle)
+    fib = mb.noise(mb.mapping(co, scale=(38, 38, 1.4)), scale=1.0, detail=4, rough=0.55).outputs["Fac"]
+    fib2 = mb.noise(mb.mapping(co, scale=(90, 90, 3.0)), scale=1.0, detail=2, rough=0.5).outputs["Fac"]
+    fibres = mb.math('ADD', mb.math('MULTIPLY', fib, 0.65), mb.math('MULTIPLY', fib2, 0.35))
+    # soft swelling mottle (wet flesh, subtle lighter crowns)
+    mot = mb.noise(mb.mapping(co, scale=(5, 5, 1.6)), scale=1.0, detail=2).outputs["Fac"]
     # angle around the tentacle; dorsal = -Y (Blender)
     ang = mb.math('ARCTAN2', xyz[1], xyz[0])
     dors = mb.node("ShaderNodeMapRange", interpolation_type='SMOOTHSTEP')
     mb.link(mb.math('SINE', ang), dors.inputs["Value"])
-    dors.inputs["From Min"].default_value = -0.86
-    dors.inputs["From Max"].default_value = -0.97
+    dors.inputs["From Min"].default_value = -0.6
+    dors.inputs["From Max"].default_value = -0.98
     dorsal = dors.outputs[0]
-    # two lengthwise veins on the flanks, wobbling
-    wob = mb.noise(mb.mapping(co, scale=(0.0, 0.0, 2.2)), scale=1.0, detail=1)
-    wv = mb.math('MULTIPLY', mb.math('SUBTRACT', wob.outputs["Fac"], 0.5), 0.9)
+    # two raised lengthwise veins on the flanks, wobbling, plus faint capillaries
+    wob = mb.noise(mb.mapping(co, scale=(0.0, 0.0, 1.8)), scale=1.0, detail=1)
+    wv = mb.math('MULTIPLY', mb.math('SUBTRACT', wob.outputs["Fac"], 0.5), 1.1)
     sv = mb.math('ABSOLUTE', mb.math('SINE', mb.math('ADD', ang, wv)))
     vf = mb.node("ShaderNodeMapRange", interpolation_type='SMOOTHSTEP')
     mb.link(sv, vf.inputs["Value"])
-    vf.inputs["From Min"].default_value = 0.10
-    vf.inputs["From Max"].default_value = 0.04
-    vein = mb.math('MULTIPLY', vf.outputs[0], mb.math('SUBTRACT', 1.0, mb.math('GREATER_THAN', s, 0.97)))
-    # subtle wet "liquid muscle" mottling (kept low: stylised look)
-    mot = mb.noise(mb.mapping(co, scale=(14, 14, 3)), scale=1.0, detail=2).outputs["Fac"]
-    col = mb.mix(mb.math('MULTIPLY', mb.math('SUBTRACT', mot, 0.5), 0.25), grad, (0.0, 0.0, 0.0), 'MIX')
-    col = mb.mix(mb.math('MULTIPLY', lip, 0.55), col, mb.mix(0.5, col, C.hexlin(RC_LIP), 'SCREEN'), 'MIX')
-    col = mb.mix(seam, col, mb.mix(0.5, col, C.hexlin(VEIN)), 'MIX')
+    vf.inputs["From Min"].default_value = 0.09
+    vf.inputs["From Max"].default_value = 0.03
+    cap = mb.voronoi(mb.mapping(co, scale=(6, 6, 2.5)), scale=1.0, feature='DISTANCE_TO_EDGE')
+    capm = mb.math('SUBTRACT', 1.0, mb.math('MULTIPLY', cap.outputs["Distance"], 30.0, clamp=True))
+    capm = mb.math('MULTIPLY', capm, mb.math('MULTIPLY', mb.math('SUBTRACT', mot, 0.45), 2.5, clamp=True), clamp=True)
+    tipm = mb.math('GREATER_THAN', s0, 0.89)
+    notip = mb.math('SUBTRACT', 1.0, tipm)
+    vein = mb.math('MAXIMUM', vf.outputs[0], mb.math('MULTIPLY', capm, 0.5))
+    vein = mb.math('MULTIPLY', vein, notip)
+    col = mb.mix(mb.math('MULTIPLY', mb.math('SUBTRACT', 1.0, fibres), 0.45), grad, mb.mix(0.5, grad, (0, 0, 0, 1)))
+    col = mb.mix(mb.math('MULTIPLY', mb.math('MAXIMUM', mb.math('SUBTRACT', mot, 0.55), 0.0), 1.2), col,
+                 mb.mix(0.5, col, (1.0, 0.35, 0.35, 1), 'SCREEN'))
     colf = mb.node("ShaderNodeMapRange", interpolation_type='SMOOTHSTEP')
     mb.link(xyz[2], colf.inputs["Value"])
-    colf.inputs["From Min"].default_value = 0.05
+    colf.inputs["From Min"].default_value = 0.08
     colf.inputs["From Max"].default_value = 0.0
     collar = colf.outputs[0]
-    col = mb.mix(mb.math('MULTIPLY', collar, mb.math('SUBTRACT', 1.0, fle)), col, C.hexlin(RC_LIP))
-    col = mb.mix(dorsal, col, C.hexlin(RC_DARK))
-    col = mb.mix(mb.math('MULTIPLY', vein, 0.9), col, C.hexlin(VEIN))
-    # spear tip (last 0.6 stud): plain RC_DARK, no lips/veins (avoids sparkle on the point)
-    tipm = mb.math('GREATER_THAN', s0, 0.89)
-    col = mb.mix(tipm, col, C.hexlin(RC_DARK))
-    # kakuhou: RC_MID flesh with RC_BRIGHT veins
+    col = mb.mix(mb.math('MULTIPLY', dorsal, 0.45), col, C.hexlin(RC_TIP))
+    col = mb.mix(mb.math('MULTIPLY', vein, 0.85), col, C.hexlin(VEIN))
+    # kakuhou: deep flesh with brighter veins
     kv = mb.voronoi(mb.mapping(co, scale=(5, 5, 5)), scale=1.0, feature='DISTANCE_TO_EDGE')
     kvn = mb.noise(co, scale=5.0, detail=2).outputs["Fac"]
     kvein = mb.math('SUBTRACT', 1.0, mb.math('MULTIPLY', kv.outputs["Distance"], 22.0, clamp=True))
@@ -282,21 +247,23 @@ def build_material():
     kcol = mb.mix(mb.math('MULTIPLY', mb.math('SUBTRACT', mot, 0.5), 0.3), C.hexlin(RC_MID), (0, 0, 0))
     kcol = mb.mix(kvein, kcol, C.hexlin(RC_BRIGHT))
     color = mb.mix(fle, col, kcol)
-    # roughness: wet/glossy 0.25, seams and veins a bit duller
-    rough = mb.math('ADD', 0.35, mb.math('MULTIPLY', mb.math('ADD', seam, vein), 0.15))
-    rough = mb.math('ADD', mb.math('MULTIPLY', rough, mb.math('SUBTRACT', 1.0, tipm)), mb.math('MULTIPLY', tipm, 0.5))
-    # height: band lips, seam groove, vein grooves, fine mottling
-    h = mb.math('ADD', mb.math('MULTIPLY', lip, 0.35), mb.math('MULTIPLY', seam, -0.5))
-    h = mb.math('ADD', h, mb.math('MULTIPLY', vein, -0.35))
-    h = mb.math('ADD', h, mb.math('MULTIPLY', mot, 0.15))
-    h = mb.math('MULTIPLY', h, mb.math('SUBTRACT', 1.0, tipm))
+    # glossy wet surface (~0.25), slightly duller in fibre grooves and on veins
+    rough = mb.math('ADD', 0.2, mb.math('MULTIPLY', mb.math('SUBTRACT', 1.0, fibres), 0.12))
+    rough = mb.math('ADD', rough, mb.math('MULTIPLY', vein, 0.08))
+    rough = mb.math('ADD', mb.math('MULTIPLY', rough, notip), mb.math('MULTIPLY', tipm, 0.4))
+    rough = mb.math('ADD', mb.math('MULTIPLY', rough, mb.math('SUBTRACT', 1.0, fle)), mb.math('MULTIPLY', fle, 0.3))
+    # height: fibre striations, raised veins, soft swelling
+    h = mb.math('ADD', mb.math('MULTIPLY', fibres, 0.55), mb.math('MULTIPLY', vein, 0.45))
+    h = mb.math('ADD', h, mb.math('MULTIPLY', mot, 0.3))
+    h = mb.math('MULTIPLY', h, mb.math('ADD', 0.25, mb.math('MULTIPLY', notip, 0.75)))
     kh = mb.math('ADD', mb.math('MULTIPLY', kvein, 0.5), mb.math('MULTIPLY', kvn, 0.4))
     height = mb.mix(fle, h, kh)
-    # emissive mask: band seams 0.6 (x0.25 strength in game ~= brief 0.15), root mass 1.0 on veins
-    emis = mb.math('ADD', mb.math('MULTIPLY', mb.math('MULTIPLY', seam, 0.6), mb.math('LESS_THAN', s, 0.85)),
+    # emissive mask: faint glow along the veins (not on the tip), root mass veins
+    emis = mb.math('ADD', mb.math('MULTIPLY', vein, mb.math('MULTIPLY', 0.5, mb.math('LESS_THAN', s, 0.8))),
                    mb.math('MULTIPLY', fle, mb.math('ADD', 0.35, mb.math('MULTIPLY', kvein, 0.65))))
+    emis = mb.math('MULTIPLY', emis, 1.0, clamp=True)
     emis_col = mb.mix(1.0, emis, C.hexlin(RC_GLOW), 'MULTIPLY')
-    mb.finish(color, rough, 0.0, height=height, bump_strength=0.35, bump_distance=0.02,
+    mb.finish(color, rough, 0.0, height=height, bump_strength=0.4, bump_distance=0.02,
               emission=emis_col, emission_strength=0.25, extra={"emissive": emis})
     return mb
 
@@ -306,7 +273,7 @@ def build_material():
 def chain_mats(base, d0, bends, side=0.0, roll=0.0):
     """World matrices of Seg1..Seg5,Tip starting at `base` pointing along d0.  Each joint
     curls toward the ventral side (local +Y Blender = Roblox -Z), which faces world +Y
-    (character forward) at the root, so the spines stay on the outside."""
+    (character forward) at the root, so the dorsal ridge stays on the outside."""
     z = d0.normalized()
     f = Vector((0, 1, 0))
     y = f - z * f.dot(z)
@@ -366,7 +333,7 @@ def main(do_render=True):
              "textures": tex}
         if o.name in info:
             L, d0, d1 = info[o.name]
-            e["pivot"] = "base joint at (0,0,0); piece extends along +Y; spines/keel on +Z side"
+            e["pivot"] = "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side"
             e["joint_length"] = L
             e["base_diameter"] = round(d0, 3)
             e["bakedBend"] = "none (straight along +Y)"
@@ -391,8 +358,9 @@ def main(do_render=True):
         "chain_order": [p.name for p in pieces],
         "joint_lengths": [info[p.name][0] for p in pieces],
         "total_tentacle_length": round(TOTAL, 3),
-        "curl": "rotate each joint about the piece's local X by a negative angle (CFrame.Angles(-a,0,0)) to curl with spines outside",
-        "emissive": "textures/kagune_rinkaku_emissive.png is a greyscale glow mask; tint #FF3B3B, strength ~0.25",
+        "curl": "rotate each joint about the piece's local X by a negative angle (CFrame.Angles(-a,0,0)) to curl with the dorsal ridge outside",
+        "version": "v3: long (9.2), fleshy, smooth wet muscle, no spikes",
+        "emissive": "textures/kagune_rinkaku_emissive.png is a greyscale glow mask; tint #FF3B3B, strength ~0.25 (veins + root mass)",
         "triangles_total": sum(C.tri_count(o) for o in allp),
         "objects": objs,
     })
@@ -405,17 +373,18 @@ def main(do_render=True):
 
 SPREAD = {   # attack spread: (base direction (Blender), bends per joint, side-bend, roll)
     # upper pair rise behind the shoulders and arc forward over them; lower pair sweep
-    # out to the sides at the waist and hook forward
-    "UpperRight": (Vector((0.6, -0.75, 1.0)), [16, 28, 34, 36, 30], -2, 0),
-    "UpperLeft": (Vector((-0.6, -0.75, 1.0)), [14, 30, 32, 38, 28], 2, 0),
-    "LowerRight": (Vector((1.0, -0.45, 0.05)), [8, 20, 26, 30, 24], 0, 0),
-    "LowerLeft": (Vector((-1.0, -0.45, 0.05)), [10, 18, 28, 28, 26], 0, 0),
+    # out to the sides at the waist and hook forward toward the target
+    "UpperRight": (Vector((0.6, -0.8, 1.0)), [14, 24, 28, 30, 26], -2, 0),
+    "UpperLeft": (Vector((-0.6, -0.8, 1.0)), [12, 26, 27, 32, 24], 2, 0),
+    "LowerRight": (Vector((1.0, -0.5, 0.1)), [8, 18, 24, 26, 22], [0, 2, -2, 0, 0], 0),
+    "LowerLeft": (Vector((-1.0, -0.5, 0.1)), [10, 16, 25, 25, 24], [0, -2, 2, 0, 0], 0),
 }
-REST = {     # idle: S-curve fan rising behind the shoulders, tips ~1 above the head
-    "UpperRight": (Vector((0.22, -0.35, 1.0)), [4, 5, 4, 3, 2], [-6, -4, 6, 10, 12], 0),
-    "UpperLeft": (Vector((-0.22, -0.35, 1.0)), [4, 5, 4, 3, 2], [6, 4, -6, -10, -12], 0),
-    "LowerRight": (Vector((0.62, -0.35, 1.0)), [3, 4, 4, 3, 2], [-8, -5, 6, 11, 14], 0),
-    "LowerLeft": (Vector((-0.62, -0.35, 1.0)), [3, 4, 4, 3, 2], [8, 5, -6, -11, -14], 0),
+REST = {     # idle: S-curve rising behind the shoulders and fanning out, outer ~40% curled
+    # back and down (max ~35 deg per joint); tips end ~1.5-2 studs above the head
+    "UpperRight": (Vector((0.45, -0.35, 1.0)), [6, -14, -30, -35, -35], [-10, 4, 10, 12, 12], 0),
+    "UpperLeft": (Vector((-0.45, -0.35, 1.0)), [6, -14, -30, -35, -35], [10, -4, -10, -12, -12], 0),
+    "LowerRight": (Vector((1.1, -0.4, 1.0)), [4, -12, -28, -35, -35], [-6, 6, 12, 14, 14], 0),
+    "LowerLeft": (Vector((-1.1, -0.4, 1.0)), [4, -12, -28, -35, -35], [6, -6, -12, -14, -14], 0),
 }
 SINK = 0.12   # tentacle bases sit this far inside the root mass
 
@@ -472,10 +441,10 @@ def render(pieces, kak):
         o.hide_render = True
     # turnaround of one straight tentacle + kakuhou (piece reference) and a 25 deg joint test
     straight = instance_chain(pieces, chain_mats(Vector((0, 0, 0)), Vector((0, 0, 1)), [0] * 5), "straight")
-    bent = instance_chain(pieces, chain_mats(Vector((1.6, 0, 0)), Vector((0, 0, 1)), [25] * 5), "bent")
+    bent = instance_chain(pieces, chain_mats(Vector((1.8, 0, 0)), Vector((0, 0, 1)), [25] * 5), "bent")
     k3 = kak.copy()
     C.link(k3)
-    k3.matrix_world = Matrix.Translation((-1.4, 0, 0.6))
+    k3.matrix_world = Matrix.Translation((-1.6, 0, 0.6))
     k3.hide_render = False
     grp = straight + bent + [k3]
     parts = []
@@ -485,7 +454,7 @@ def render(pieces, kak):
     C.stitch(parts, os.path.join(R, f"{ASSET}_turnaround.png"))
     for o in grp:
         o.hide_render = True
-    j = instance_chain(pieces[:3], chain_mats(Vector((0, 0, 0)), Vector((0, 0, 1)), [25, 25, 0, 0, 0]), "joint")
+    j = instance_chain(pieces[:3], chain_mats(Vector((0, 0, 0)), Vector((0, 0, 1)), [30, 30, 0, 0, 0]), "joint")
     C.camera_view(j, 90, 5, margin=1.1)
     C.render_to(os.path.join(R, f"{ASSET}_joint_detail.png"))
 

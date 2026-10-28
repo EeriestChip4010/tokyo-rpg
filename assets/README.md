@@ -27,6 +27,7 @@ Run from the repo root. Blender runs headless as the `bpy` Python module (`pip i
 - It builds the meshes, Smart-UV-unwraps all pieces of the asset into one shared atlas, and bakes 1024x1024 PNGs from the procedural node material.
 - The PNGs are `_albedo` (sRGB), `_normal` (tangent space, OpenGL / +Y), `_roughness`, `_metalness` and `_emissive` (greyscale glow mask).
 - It then exports FBX and OBJ, merges its entry into `models/manifest.json`, and renders review images into `renders/`.
+- `tools/blender/preview_kagune_pose.py` reproduces the game's tentacle pose math (Kakuhou, root and curl chain, in Roblox CFrames) on the R6 mannequin. It renders `renders/kagune_rinkaku_pose_rest.png` and `_pose_strike.png` and prints a pose report (tip positions, height, body intersections). Pass a JSON object of overrides as the last argument to try new numbers. The defaults are the approved rest and strike values.
 - Add `--no-render` to skip the renders (about 1 min per asset is mostly baking).
 - To rebuild the manifest from scratch, delete it and run all three scripts.
 
@@ -36,17 +37,17 @@ Run from the repo root. Blender runs headless as the `bpy` Python module (`pip i
 - **Roblox axes in the files:** +Y up, the character faces -Z. The scripts model Z-up in Blender and export with up=Y, forward=-Z. Roblox X = Blender X, Roblox Y = Blender Z, Roblox Z = Blender -Y. Use `common.rbx(x, y, z)` to write Roblox coordinates in Blender space.
 - **MeshParts are centred on their bounding box** in Roblox. Each manifest entry has `bboxCenterFromOrigin`, the offset from the contract origin to the bbox centre. Use it to rebuild the pivot (`PivotOffset = CFrame.new(-offset)`).
 
-### Kagune: `RinkakuSeg1`..`RinkakuSeg5`, `RinkakuTip`, `Kakuhou`
-- Each piece is modelled along **+Y**. The origin is its base joint, and the top joint is at `(0, L, 0)`. Lengths are 1.3 / 1.2 / 1.1 / 1.0 / 0.9 and the tip is 0.6, for 6.1 studs along the curve.
-- Joint diameters run 0.50 at the root down to about 0.13 at the tip base (see the manifest).
-- Each piece has a dome centred on its top joint. Its base has a flared collar that sleeves about 0.15 over the previous piece, so bends of up to about 25–35° per joint stay closed.
-- The oval section is wide in X. The dorsal keel and spines are on local **+Z**. Curl with `CFrame.Angles(-a, 0, 0)` per joint to keep the spines on the outside of the curve.
-- The only bend baked into the meshes is the tip's point, hooked about 10° toward -Z.
+### Kagune (v3: long, smooth, fleshy): `RinkakuSeg1`..`RinkakuSeg5`, `RinkakuTip`, `Kakuhou`
+- Each piece is modelled along **+Y**. The origin is its base joint, and the top joint is at `(0, L, 0)`. Lengths are 2.0 / 1.8 / 1.7 / 1.5 / 1.3 and the tip is 0.9, for 9.2 studs along the curve.
+- Diameter is 0.60 at the root (0.65 muscle belly) and tapers gradually to about 0.22 at the tip base. Every joint diameter is in the manifest.
+- Each piece has a dome centred on its top joint. Its base has a soft muscle collar that sleeves about 0.15 over the previous piece, so bends of up to about 25–35° per joint stay closed.
+- The section is nearly round, with smooth swelling, wet muscle-fibre striations and veins. There are no spikes, only a soft, low dorsal ridge on local **+Z**. Curl with `CFrame.Angles(-a, 0, 0)` per joint to keep that ridge on the outside of the curve.
+- The only bend baked into the meshes is the tip's spear point, hooked about 10° toward -Z.
 - To chain the pieces: `piece[i+1].CFrame = piece[i].CFrame * CFrame.new(0, L[i], 0) * CFrame.Angles(-a, 0, b)`.
 - `Kakuhou` is the root mass. Its origin is its centre. The visible face points +Z (the character's back) and the flat side (-Z) rests on the torso. Mount it at `Torso.CFrame * CFrame.new(0, -0.65, 0.65)`, which puts its centre 2.35 studs above the feet.
 - The four tail sockets (UpperRight/Left at ±0.30, LowerRight/Left at ±0.55) are listed with position and outward direction in `manifest.json`. Clone the chain 4 times.
-- Colour runs bright `#D21F2B` at the root to `#8A0F1B` on Seg4–5 to `#4A060E` on the tip.
-- Emissive: the mask covers the band seams and the root mass. Tint `#FF3B3B`, strength about 0.15–0.25.
+- Colour runs deep red `#C0162A` at the root to `#7E0C18` to `#3A040B` at the tip, and the surface is glossy (roughness about 0.25).
+- Emissive: the mask covers the veins and the root mass. Tint `#FF3B3B`, strength about 0.15–0.25.
 
 ### Case: `CaseShellFront`, `CaseShellBack`, `CaseHandle`
 - Every object's origin is the **grip point**, the centre of the handle bar, where it attaches to `RightGripAttachment`.

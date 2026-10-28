@@ -52,7 +52,8 @@ WeaponModels.Palette = Palette
 
 -- Sizes and centres of every piece come from assets/models/manifest.json.
 
--- Rinkaku (Kaneki's early/mid look): four tentacles, root bright to tip dark.
+-- Rinkaku (Kaneki's early/mid look): four long, fleshy tentacles, deep red
+-- at the root fading to near-black at the tip.
 WeaponModels.Rinkaku = {
 	kakuhou = {
 		name = "Kakuhou",
@@ -65,12 +66,12 @@ WeaponModels.Rinkaku = {
 	-- Mount point on the torso: the lower back, just above the hip line.
 	mount = CFrame.new(0, -0.65, 0.65),
 	segments = {
-		segment("RinkakuSeg1", 1.3, Vector3.new(0.6, 1.775, 0.63), Vector3.new(0, 0.638, 0.075), Palette.RcBright),
-		segment("RinkakuSeg2", 1.2, Vector3.new(0.541, 1.605, 0.54), Vector3.new(0, 0.577, 0.053), Palette.RcBright),
-		segment("RinkakuSeg3", 1.1, Vector3.new(0.431, 1.42, 0.432), Vector3.new(0, 0.53, 0.044), Palette.RcMid),
-		segment("RinkakuSeg4", 1, Vector3.new(0.336, 1.241, 0.34), Vector3.new(0, 0.48, 0.035), Palette.RcMid),
-		segment("RinkakuSeg5", 0.9, Vector3.new(0.242, 1.066, 0.23), Vector3.new(0, 0.432, 0.018), Palette.RcDark),
-		segment("RinkakuTip", 0.6, Vector3.new(0.169, 0.665, 0.162), Vector3.new(0, 0.268, 0.013), Palette.RcDark),
+		segment("RinkakuSeg1", 2, Vector3.new(0.806, 2.723, 0.759), Vector3.new(-0.006, 1.001, 0.013), Palette.RcBright),
+		segment("RinkakuSeg2", 1.8, Vector3.new(0.762, 2.48, 0.703), Vector3.new(0, 0.877, 0.01), Palette.RcBright),
+		segment("RinkakuSeg3", 1.7, Vector3.new(0.666, 2.267, 0.598), Vector3.new(0, 0.816, 0), Palette.RcMid),
+		segment("RinkakuSeg4", 1.5, Vector3.new(0.525, 1.943, 0.484), Vector3.new(0, 0.722, 0.007), Palette.RcMid),
+		segment("RinkakuSeg5", 1.3, Vector3.new(0.406, 1.643, 0.364), Vector3.new(0, 0.628, 0), Palette.RcDark),
+		segment("RinkakuTip", 0.9, Vector3.new(0.316, 1.05, 0.296), Vector3.new(0, 0.375, 0.007), Palette.RcDark),
 	},
 	-- Sockets on the kakuhou: right upper, left upper, right lower, left lower.
 	sockets = {
