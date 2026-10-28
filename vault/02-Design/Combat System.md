@@ -24,6 +24,7 @@ Dash and dodge share the Q key; whether you're moving decides which one fires. T
 - **Uppercut / downslam variants:** jump + M1 and M1 while holding space for combo routes.
 
 ## Posture (block meter)
+Built in the prototype. #draft
 - Blocking drains **posture** instead of HP. When posture breaks, the player is **guard broken**: stunned and open to a critical.
 - Posture regenerates when not blocking.
 - Heavy attacks (Koukaku, heavy quinques) deal extra posture damage.

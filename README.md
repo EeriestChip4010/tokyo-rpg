@@ -23,4 +23,15 @@ Game code lives in `src/` and syncs into Roblox Studio with [Rojo](https://rojo.
 ### Every session
 1. Run `rojo serve` in this folder.
 2. In Studio, open the Rojo plugin and click **Connect**.
-3. Edit code in `src/`. Changes appear in Studio live. Press Play to test (there's a training dummy in front of spawn).
+3. Edit code in `src/`. Changes appear in Studio live. Press Play to test.
+
+### Controls and test dummies
+| Input | Action |
+|---|---|
+| Left click | M1 (4-hit chain; the 4th hit knocks back) |
+| Hold F | Block (uses posture; running out causes a guard break) |
+| Tap F just before a hit | Parry (stuns the attacker) |
+| Q while moving | Dash |
+| Q while standing still | Dodge (brief invincibility) |
+
+Two dummies spawn in front of the spawn point: a plain **Training Dummy** (left) and a **Blocking Dummy** (right) that always blocks, for testing posture and guard breaks. Hit flashes: white = hit, blue = blocked, yellow = parried, red = guard break.
