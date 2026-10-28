@@ -34,11 +34,11 @@ local Palette = {
 	GripBlack = Color3.fromHex("1D1E21"),
 }
 
-local function segment(name: string, length: number, base: number, color: Color3): PieceSpec
+local function segment(name: string, length: number, size: Vector3, center: Vector3, color: Color3): PieceSpec
 	return {
 		name = name,
-		size = Vector3.new(base, length, base * 0.8),
-		center = Vector3.new(0, length / 2, 0),
+		size = size,
+		center = center,
 		length = length,
 		color = color,
 		material = Enum.Material.SmoothPlastic,
@@ -50,25 +50,27 @@ local WeaponModels = {}
 
 WeaponModels.Palette = Palette
 
+-- Sizes and centres of every piece come from assets/models/manifest.json.
+
 -- Rinkaku (Kaneki's early/mid look): four tentacles, root bright to tip dark.
 WeaponModels.Rinkaku = {
 	kakuhou = {
 		name = "Kakuhou",
-		size = Vector3.new(1.4, 0.6, 0.35),
-		center = Vector3.zero,
+		size = Vector3.new(1.347, 0.549, 0.308),
+		center = Vector3.new(-0.001, 0.002, 0.08),
 		color = Palette.RcMid,
 		material = Enum.Material.SmoothPlastic,
 		shape = "Ball",
 	} :: PieceSpec,
 	-- Mount point on the torso: the lower back, just above the hip line.
-	mount = CFrame.new(0, -0.65, 0.55),
+	mount = CFrame.new(0, -0.65, 0.65),
 	segments = {
-		segment("RinkakuSeg1", 1.3, 0.5, Palette.RcBright),
-		segment("RinkakuSeg2", 1.2, 0.42, Palette.RcBright),
-		segment("RinkakuSeg3", 1.1, 0.34, Palette.RcMid),
-		segment("RinkakuSeg4", 1.0, 0.27, Palette.RcMid),
-		segment("RinkakuSeg5", 0.9, 0.2, Palette.RcDark),
-		segment("RinkakuTip", 0.6, 0.13, Palette.RcDark),
+		segment("RinkakuSeg1", 1.3, Vector3.new(0.6, 1.775, 0.63), Vector3.new(0, 0.638, 0.075), Palette.RcBright),
+		segment("RinkakuSeg2", 1.2, Vector3.new(0.541, 1.605, 0.54), Vector3.new(0, 0.577, 0.053), Palette.RcBright),
+		segment("RinkakuSeg3", 1.1, Vector3.new(0.431, 1.42, 0.432), Vector3.new(0, 0.53, 0.044), Palette.RcMid),
+		segment("RinkakuSeg4", 1, Vector3.new(0.336, 1.241, 0.34), Vector3.new(0, 0.48, 0.035), Palette.RcMid),
+		segment("RinkakuSeg5", 0.9, Vector3.new(0.242, 1.066, 0.23), Vector3.new(0, 0.432, 0.018), Palette.RcDark),
+		segment("RinkakuTip", 0.6, Vector3.new(0.169, 0.665, 0.162), Vector3.new(0, 0.268, 0.013), Palette.RcDark),
 	},
 	-- Sockets on the kakuhou: right upper, left upper, right lower, left lower.
 	sockets = {
@@ -85,38 +87,38 @@ WeaponModels.Rinkaku = {
 WeaponModels.Quinque = {
 	caseShellFront = {
 		name = "CaseShellFront",
-		size = Vector3.new(1.6, 1.2, 0.2),
-		center = Vector3.new(0, -0.82, -0.1),
+		size = Vector3.new(1.7, 1.3, 0.216),
+		center = Vector3.new(0, -0.76, -0.115),
 		color = Palette.SteelLight,
 		material = Enum.Material.Metal,
 	} :: PieceSpec,
 	caseShellBack = {
 		name = "CaseShellBack",
-		size = Vector3.new(1.6, 1.2, 0.2),
-		center = Vector3.new(0, -0.82, 0.1),
+		size = Vector3.new(1.7, 1.3, 0.216),
+		center = Vector3.new(0, -0.76, 0.115),
 		color = Palette.SteelLight,
 		material = Enum.Material.Metal,
 	} :: PieceSpec,
 	caseHandle = {
 		name = "CaseHandle",
-		size = Vector3.new(0.55, 0.22, 0.12),
-		center = Vector3.new(0, -0.07, 0),
+		size = Vector3.new(0.65, 0.2, 0.12),
+		center = Vector3.new(0, -0.06, 0),
 		color = Palette.GripBlack,
 		material = Enum.Material.SmoothPlastic,
 	} :: PieceSpec,
 	-- The bottom long edge the shells hinge open around, in case space.
-	hinge = Vector3.new(0, -1.42, 0),
+	hinge = Vector3.new(0, -1.36, 0),
 	hilt = {
 		name = "QuinqueHilt",
-		size = Vector3.new(0.3, 1.1, 0.14),
-		center = Vector3.new(0, 0.05, 0),
+		size = Vector3.new(0.17, 1, 0.336),
+		center = Vector3.new(0, 0.1, -0.03),
 		color = Palette.GripBlack,
 		material = Enum.Material.SmoothPlastic,
 	} :: PieceSpec,
 	blade = {
 		name = "QuinqueBlade",
-		size = Vector3.new(0.06, 2.8, 0.26),
-		center = Vector3.new(0, 2.0, 0),
+		size = Vector3.new(0.08, 2.9, 0.365),
+		center = Vector3.new(0, 1.95, 0.023),
 		color = Palette.Blade,
 		material = Enum.Material.Metal,
 	} :: PieceSpec,

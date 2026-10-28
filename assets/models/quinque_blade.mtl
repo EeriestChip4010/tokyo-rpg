@@ -1,0 +1,14 @@
+# Blender 4.2.0 MTL File: 'None'
+# www.blender.org
+
+newmtl quinque_blade_game
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.030000 0.030000 0.030000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd quinque_blade_albedo.png
+map_Ns quinque_blade_roughness.png
+map_refl quinque_blade_metalness.png
+map_Bump -bm 1.000000 quinque_blade_normal.png

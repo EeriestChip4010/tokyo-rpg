@@ -14,7 +14,8 @@ aliases: [Quinque]
 ## Notable examples
 - **IXA** (Koukaku) and **Narukami** (Ukaku): Kishou Arima #canon
 - **13's Jason** (Rinkaku, from Yamori): Juuzou Suzuya #canon
-- **Kura**: Kotaro Amon #verify (type)
+- **Kura** (Koukaku): Kureo Mado, inherited by Kotaro Amon. A staff with a blade at the end that splits in two. Amon's first quinque was Doujima 1/2 (Koukaku). #canon
+- **Tsunagi** (Bikaku, C-rate): mass-produced issue blade, long and guardless with a bare hilt; Urie and Shirazu carry it. Basis for our starter quinque. #canon
 
 ## Related
 [[CCG]] · [[Kagune Types]] · [[Quinque Design]]

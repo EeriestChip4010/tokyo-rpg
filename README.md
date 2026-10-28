@@ -29,9 +29,18 @@ Game code lives in `src/` and syncs into Roblox Studio with [Rojo](https://rojo.
 | Input | Action |
 |---|---|
 | Left click | M1 (4-hit chain; the 4th hit knocks back) |
+| Right click during a swing's windup | Feint |
 | Hold F | Block (uses posture; running out causes a guard break) |
 | Tap F just before a hit | Parry (stuns the attacker) |
 | Q while moving | Dash |
 | Q while standing still | Dodge (brief invincibility) |
+| G | Release the kagune (ghouls) or open the quinque case (investigators) |
+| E / R | Weapon skills while the kagune or quinque is out |
+| P (Studio only) | Swap between the ghoul and investigator test loadouts |
 
 Two dummies spawn in front of the spawn point: a plain **Training Dummy** (left) and a **Blocking Dummy** (right) that always blocks, for testing posture and guard breaks. Hit flashes: white = hit, blue = blocked, yellow = parried, red = guard break.
+
+Each player rolls an origin on join (60% human, 39% ghoul, 1% one-eyed). Humans start as investigators carrying the CCG case; ghouls get a Rinkaku kagune. In Studio, press P to swap.
+
+### Weapon models
+Models are built with headless Blender from `tools/blender/` into `assets/`. See [`assets/README.md`](assets/README.md) for how to regenerate them and how to get them into Studio. Until they're imported, the game uses plain-part stand-ins.
