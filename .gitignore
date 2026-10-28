@@ -11,3 +11,6 @@ vault/.trash/
 *.rbxl.lock
 *.rbxlx.lock
 sourcemap.json
+
+# Blender tooling
+__pycache__/

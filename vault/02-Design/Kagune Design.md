@@ -19,7 +19,9 @@ Each kagune type plays differently, following the lore strengths and weaknesses 
 | Rinkaku | Aggressive brawler | Grab-and-slam tentacles. Heals on hit, but its kagune is easy to sever. |
 | Bikaku | Balanced, technical | Long sweeping tail with a guard-breaking spin. |
 
-Recommendation: build **Rinkaku** first. It's the series' most iconic type (Kaneki, Rize), and its kit exercises grabs, healing and severing, which tests most of the combat framework.
+**Built first: Rinkaku** (Kaneki's four-tail look, `assets/`, `tools/blender/build_kagune.py`). M1s are tentacle stabs, a sweep and a slam; E is a four-stab barrage; R is an unblockable grab-and-slam that heals. Until the other types are built, every rolled ghoul gets Rinkaku. #agreed
+
+Original recommendation: build **Rinkaku** first. It's the series' most iconic type (Kaneki, Rize), and its kit exercises grabs, healing and severing, which tests most of the combat framework.
 
 ## Matchups
 Apply a modest damage bonus (around 10–15%) following the lore cycle in [[Kagune Types#Matchups]]. Keep it small so skill still decides fights.

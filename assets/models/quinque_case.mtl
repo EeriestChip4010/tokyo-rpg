@@ -1,0 +1,14 @@
+# Blender 4.2.0 MTL File: 'None'
+# www.blender.org
+
+newmtl quinque_case_game
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd quinque_case_albedo.png
+map_Ns quinque_case_roughness.png
+map_refl quinque_case_metalness.png
+map_Bump -bm 1.000000 quinque_case_normal.png

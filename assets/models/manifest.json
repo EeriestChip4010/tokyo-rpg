@@ -1,0 +1,519 @@
+{
+  "_contract": {
+    "units": "1 unit = 1 Roblox stud",
+    "axes": "Roblox axes: +Y up, -Z forward. Files exported with up=Y, forward=-Z.",
+    "regenerate": "/home/claude/blender-venv/bin/python tools/blender/build_<asset>.py",
+    "fbx": "vertex values are studs 1:1 (file unit declared as metres, identity object transforms); in the Roblox 3D Importer set the scale unit to Stud if the size comes in wrong",
+    "bboxCenterFromOrigin": "offset from the object's origin (joint/grip point) to its bounding-box centre, in studs; Roblox MeshParts are centred on the bbox, so pivot = bbox centre - this"
+  },
+  "kagune_rinkaku": {
+    "files": [
+      "models/kagune_rinkaku.fbx",
+      "models/kagune_rinkaku.obj"
+    ],
+    "tentacle_count": 4,
+    "chain_order": [
+      "RinkakuSeg1",
+      "RinkakuSeg2",
+      "RinkakuSeg3",
+      "RinkakuSeg4",
+      "RinkakuSeg5",
+      "RinkakuTip"
+    ],
+    "joint_lengths": [
+      2.0,
+      1.8,
+      1.7,
+      1.5,
+      1.3,
+      0.9
+    ],
+    "total_tentacle_length": 9.2,
+    "curl": "rotate each joint about the piece's local X by a negative angle (CFrame.Angles(-a,0,0)) to curl with the dorsal ridge outside",
+    "version": "v3: long (9.2), fleshy, smooth wet muscle, no spikes",
+    "emissive": "textures/kagune_rinkaku_emissive.png is a greyscale glow mask; tint #FF3B3B, strength ~0.25 (veins + root mass)",
+    "triangles_total": 4264,
+    "objects": {
+      "RinkakuSeg1": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 0.806,
+          "y": 2.723,
+          "z": 0.759
+        },
+        "bboxCenterFromOrigin": {
+          "x": -0.006,
+          "y": 1.001,
+          "z": 0.013
+        },
+        "triangles": 756,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 2.0,
+        "base_diameter": 0.72,
+        "bakedBend": "none (straight along +Y)",
+        "top_joint": [
+          0,
+          2.0,
+          0
+        ],
+        "top_diameter": 0.725
+      },
+      "RinkakuSeg2": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 0.762,
+          "y": 2.48,
+          "z": 0.703
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 0.877,
+          "z": 0.01
+        },
+        "triangles": 700,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.8,
+        "base_diameter": 0.725,
+        "bakedBend": "none (straight along +Y)",
+        "top_joint": [
+          0,
+          1.8,
+          0
+        ],
+        "top_diameter": 0.635
+      },
+      "RinkakuSeg3": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 0.666,
+          "y": 2.267,
+          "z": 0.598
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 0.816,
+          "z": 0.0
+        },
+        "triangles": 672,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.7,
+        "base_diameter": 0.635,
+        "bakedBend": "none (straight along +Y)",
+        "top_joint": [
+          0,
+          1.7,
+          0
+        ],
+        "top_diameter": 0.5
+      },
+      "RinkakuSeg4": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 0.525,
+          "y": 1.943,
+          "z": 0.484
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 0.722,
+          "z": 0.007
+        },
+        "triangles": 616,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.5,
+        "base_diameter": 0.5,
+        "bakedBend": "none (straight along +Y)",
+        "top_joint": [
+          0,
+          1.5,
+          0
+        ],
+        "top_diameter": 0.387
+      },
+      "RinkakuSeg5": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 0.406,
+          "y": 1.643,
+          "z": 0.364
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 0.628,
+          "z": -0.0
+        },
+        "triangles": 560,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 1.3,
+        "base_diameter": 0.387,
+        "bakedBend": "none (straight along +Y)",
+        "top_joint": [
+          0,
+          1.3,
+          0
+        ],
+        "top_diameter": 0.3
+      },
+      "RinkakuTip": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 0.316,
+          "y": 1.05,
+          "z": 0.296
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 0.375,
+          "z": 0.007
+        },
+        "triangles": 476,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "pivot": "base joint at (0,0,0); piece extends along +Y; soft dorsal ridge on +Z side",
+        "joint_length": 0.9,
+        "base_diameter": 0.3,
+        "bakedBend": "point hooked ~10 deg toward -Z (ventral/inner side of the curl)",
+        "point_at": [
+          0,
+          0.9,
+          -0.081
+        ]
+      },
+      "Kakuhou": {
+        "file": [
+          "models/kagune_rinkaku.fbx",
+          "models/kagune_rinkaku.obj"
+        ],
+        "bbox_size": {
+          "x": 1.347,
+          "y": 0.549,
+          "z": 0.308
+        },
+        "bboxCenterFromOrigin": {
+          "x": -0.001,
+          "y": 0.002,
+          "z": 0.08
+        },
+        "triangles": 484,
+        "textures": {
+          "albedo": "textures/kagune_rinkaku_albedo.png",
+          "roughness": "textures/kagune_rinkaku_roughness.png",
+          "metalness": "textures/kagune_rinkaku_metalness.png",
+          "emissive": "textures/kagune_rinkaku_emissive.png",
+          "normal": "textures/kagune_rinkaku_normal.png"
+        },
+        "bakedBend": "n/a",
+        "pivot": "centre of the root mass; visible face +Z (character's back), flat side -Z on the torso. Mount at Torso CFrame * (0, -0.65, 0.65) (Y=2.35 from feet)",
+        "sockets": {
+          "UpperRight": {
+            "position": [
+              0.3,
+              0.1,
+              0.1
+            ],
+            "direction": [
+              0.287,
+              0.493,
+              0.821
+            ]
+          },
+          "UpperLeft": {
+            "position": [
+              -0.3,
+              0.1,
+              0.1
+            ],
+            "direction": [
+              -0.287,
+              0.493,
+              0.821
+            ]
+          },
+          "LowerRight": {
+            "position": [
+              0.55,
+              -0.1,
+              0.07
+            ],
+            "direction": [
+              0.6,
+              -0.04,
+              0.799
+            ]
+          },
+          "LowerLeft": {
+            "position": [
+              -0.55,
+              -0.1,
+              0.07
+            ],
+            "direction": [
+              -0.6,
+              -0.04,
+              0.799
+            ]
+          }
+        }
+      }
+    }
+  },
+  "quinque_case": {
+    "files": [
+      "models/quinque_case.fbx",
+      "models/quinque_case.obj"
+    ],
+    "axes": "width X (1.6), hangs along -Y below the grip (shell top at Y=-0.16, bottom at Y=-1.36), thickness Z (0.4)",
+    "hold": "R6: attach origin to RightGripAttachment; rotate 90 deg about Y so the width runs along the character's forward axis (hanging at the side)",
+    "emissive": "mask covers the seam interior and the trigger; tint #FF3B3B, strength 0 at rest",
+    "triangles_total": 1936,
+    "objects": {
+      "CaseShellFront": {
+        "file": [
+          "models/quinque_case.fbx",
+          "models/quinque_case.obj"
+        ],
+        "bbox_size": {
+          "x": 1.7,
+          "y": 1.3,
+          "z": 0.216
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": -0.76,
+          "z": -0.115
+        },
+        "triangles": 976,
+        "pivot": "grip point = centre of the handle bar (same origin for all case objects)",
+        "bakedBend": "n/a",
+        "textures": {
+          "albedo": "textures/quinque_case_albedo.png",
+          "roughness": "textures/quinque_case_roughness.png",
+          "metalness": "textures/quinque_case_metalness.png",
+          "emissive": "textures/quinque_case_emissive.png",
+          "normal": "textures/quinque_case_normal.png"
+        },
+        "note": "front = -Z half; inner seam face is RC_DARK (emissive mask 1)",
+        "hinge": {
+          "point": [
+            0.0,
+            -1.36,
+            -0.0075
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "open": "rotate about the hinge line (bottom long edge); front opens toward -Z, back toward +Z"
+        }
+      },
+      "CaseShellBack": {
+        "file": [
+          "models/quinque_case.fbx",
+          "models/quinque_case.obj"
+        ],
+        "bbox_size": {
+          "x": 1.7,
+          "y": 1.3,
+          "z": 0.216
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": -0.76,
+          "z": 0.115
+        },
+        "triangles": 624,
+        "pivot": "grip point = centre of the handle bar (same origin for all case objects)",
+        "bakedBend": "n/a",
+        "textures": {
+          "albedo": "textures/quinque_case_albedo.png",
+          "roughness": "textures/quinque_case_roughness.png",
+          "metalness": "textures/quinque_case_metalness.png",
+          "emissive": "textures/quinque_case_emissive.png",
+          "normal": "textures/quinque_case_normal.png"
+        },
+        "note": "back = +Z half",
+        "hinge": {
+          "point": [
+            0.0,
+            -1.36,
+            0.0075
+          ],
+          "axis": [
+            1,
+            0,
+            0
+          ],
+          "open": "rotate about the hinge line (bottom long edge); front opens toward -Z, back toward +Z"
+        }
+      },
+      "CaseHandle": {
+        "file": [
+          "models/quinque_case.fbx",
+          "models/quinque_case.obj"
+        ],
+        "bbox_size": {
+          "x": 0.65,
+          "y": 0.2,
+          "z": 0.12
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": -0.06,
+          "z": -0.0
+        },
+        "triangles": 336,
+        "pivot": "grip point = centre of the handle bar (same origin for all case objects)",
+        "bakedBend": "n/a",
+        "textures": {
+          "albedo": "textures/quinque_case_albedo.png",
+          "roughness": "textures/quinque_case_roughness.png",
+          "metalness": "textures/quinque_case_metalness.png",
+          "emissive": "textures/quinque_case_emissive.png",
+          "normal": "textures/quinque_case_normal.png"
+        },
+        "trigger_position": [
+          0.07,
+          -0.06,
+          0.0
+        ]
+      }
+    }
+  },
+  "quinque_blade": {
+    "files": [
+      "models/quinque_blade.fbx",
+      "models/quinque_blade.obj"
+    ],
+    "name": "CCG Issue Blade (Tsunagi pattern), Bikaku C-rate",
+    "axes": "blade points +Y, edge faces -Z, spine/vertebrae +Z; overall Y from -0.40 (pommel) to +3.40 (tip)",
+    "overall_length": 3.8,
+    "emissive": "mask = spine vertebrae; tint #FF3B3B, strength 0.1 (0.6 during skills)",
+    "triangles_total": 1944,
+    "objects": {
+      "QuinqueHilt": {
+        "file": [
+          "models/quinque_blade.fbx",
+          "models/quinque_blade.obj"
+        ],
+        "bbox_size": {
+          "x": 0.17,
+          "y": 1.0,
+          "z": 0.336
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 0.1,
+          "z": -0.03
+        },
+        "triangles": 716,
+        "pivot": "grip point = centre of the grip (same origin for hilt and blade)",
+        "textures": {
+          "albedo": "textures/quinque_blade_albedo.png",
+          "roughness": "textures/quinque_blade_roughness.png",
+          "metalness": "textures/quinque_blade_metalness.png",
+          "emissive": "textures/quinque_blade_emissive.png",
+          "normal": "textures/quinque_blade_normal.png"
+        },
+        "bakedBend": "none",
+        "trigger_position": [
+          0.0,
+          0.3,
+          -0.075
+        ],
+        "collar_span_y": [
+          0.4,
+          0.6
+        ]
+      },
+      "QuinqueBlade": {
+        "file": [
+          "models/quinque_blade.fbx",
+          "models/quinque_blade.obj"
+        ],
+        "bbox_size": {
+          "x": 0.08,
+          "y": 2.9,
+          "z": 0.365
+        },
+        "bboxCenterFromOrigin": {
+          "x": 0.0,
+          "y": 1.95,
+          "z": 0.023
+        },
+        "triangles": 1228,
+        "pivot": "grip point = centre of the grip (same origin for hilt and blade)",
+        "textures": {
+          "albedo": "textures/quinque_blade_albedo.png",
+          "roughness": "textures/quinque_blade_roughness.png",
+          "metalness": "textures/quinque_blade_metalness.png",
+          "emissive": "textures/quinque_blade_emissive.png",
+          "normal": "textures/quinque_blade_normal.png"
+        },
+        "bakedBend": "blade curves 0.09 sagitta toward +Z (spine side); edge on the convex side; tip deflected about 0.09 toward +Z",
+        "blade_span_y": [
+          0.6,
+          3.4
+        ]
+      }
+    }
+  }
+}

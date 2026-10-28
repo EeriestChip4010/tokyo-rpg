@@ -17,7 +17,18 @@ Quinques are crafted from **kakuhou** dropped by defeated ghouls, NPC or player.
 - Starter investigators get a standard C-rate issue quinque from the CCG.
 
 ## First-playable scope
-One C-rate Bikaku-type issue quinque (a simple blade): 2 skills plus M1 chain.
+One C-rate Bikaku-type issue quinque: the **CCG Issue Blade (Tsunagi pattern)**, after canon's mass-produced Tsunagi. 3.8 studs, no crossguard, nine dark-red plates on the spine as the Bikaku touch. Built (`assets/`, `tools/blender/build_blade.py`). #agreed
+- M1 chain: 3 slashes and a lunging thrust finisher.
+- E **Rising Slash**: launches and deals heavy posture damage.
+- R **Tail Sweep**: a spin around the user that is built to guard break.
+- Quinque charge (hidden) refills over time and on hits.
+
+## The case
+A plain silver CCG case (1.6 x 1.2 x 0.4 studs) with a small tone-on-tone "CCG" plate and a trigger on the handle. Investigators carry it in the right hand. G deploys in 0.7 s and getting hit interrupts it:
+1. The trigger sparks (the electrical stimulus).
+2. The two shells hinge open from the bottom edge and fold into the collar.
+3. RC pours out along the blade axis, overshoots, then hardens into the blade.
+The handle stays in the hand and becomes the hilt. Sheathing plays it backwards, faster. The folding into the collar and the trigger glow are our stylisation.
 
 ## Related
 [[Combat System]] · [[Progression]] · [[CCG]]
