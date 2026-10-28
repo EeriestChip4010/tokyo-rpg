@@ -4,4 +4,4 @@ local CombatController = require(script.CombatController)
 local Hud = require(script.Hud)
 
 CombatController.start()
-Hud.start()
+Hud.start(CombatController.getCooldowns)

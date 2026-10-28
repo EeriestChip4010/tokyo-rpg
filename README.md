@@ -18,7 +18,7 @@ Game code lives in `src/` and syncs into Roblox Studio with [Rojo](https://rojo.
 ### First-time setup (Windows)
 1. Install [Aftman](https://github.com/LPGhatguy/aftman) (or Rokit), then run `aftman install` in this folder to get the pinned Rojo version.
 2. Run `rojo plugin install` to add the Rojo plugin to Roblox Studio.
-3. Open a Baseplate in Studio.
+3. Open a Baseplate in Studio. The game is R6: set **Game Settings > Avatar > Avatar Type** to R6 (the training dummies already spawn as R6).
 
 ### Every session
 1. Run `rojo serve` in this folder.

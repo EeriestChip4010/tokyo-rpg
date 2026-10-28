@@ -99,6 +99,11 @@ local function onMoveKey()
 	end
 end
 
+-- Server-clock times when dash and dodge are usable again, for the HUD.
+function CombatController.getCooldowns(): (number, number)
+	return dashReadyAt, dodgeReadyAt
+end
+
 function CombatController.start()
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then

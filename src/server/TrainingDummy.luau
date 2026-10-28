@@ -1,5 +1,5 @@
 --!strict
--- Spawns a standing R15 dummy for testing hits. It respawns after dying.
+-- Spawns a standing R6 dummy for testing hits. It respawns after dying.
 -- A dummy spawned with alwaysBlock = true holds block, for testing posture
 -- and guard breaks (CombatService reads the AlwaysBlock attribute).
 
@@ -12,7 +12,7 @@ local RESPAWN_DELAY = 3
 function TrainingDummy.spawn(position: Vector3, alwaysBlock: boolean?)
 	local dummy = Players:CreateHumanoidModelFromDescription(
 		Instance.new("HumanoidDescription"),
-		Enum.HumanoidRigType.R15
+		Enum.HumanoidRigType.R6
 	)
 	dummy.Name = if alwaysBlock then "BlockingDummy" else "TrainingDummy"
 	dummy:SetAttribute("AlwaysBlock", alwaysBlock == true)
