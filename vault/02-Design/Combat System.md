@@ -11,12 +11,12 @@ Goal for the first playable: responsive, skill-based melee in the style of Deepw
 | LMB | **M1** | Basic attack chain |
 | F (hold) | **Block** | Reduce damage, costs posture |
 | F (tap on hit) | **Parry** | Perfect block window, staggers attacker |
-| Q | **Dash** | Fast directional move, for gap closing and repositioning |
-| Q while blocking / after being hit | **Dodge** | Short i-frame evade, the panic button |
+| Q while moving | **Dash** | Fast move in the direction you're moving, for gap closing and repositioning |
+| Q while standing still | **Dodge** | Short sidestep/backstep with i-frames, the panic button |
 | E / R / Z | Weapon skills | Kagune or quinque moves (see [[Kagune Design]], [[Quinque Design]]) |
 | G | Draw / sheathe | Release the kagune, or open the quinque case |
 
-Dash and dodge are kept separate on purpose: dash is for movement, dodge is the defensive escape with invulnerability frames, and they have separate cooldowns.
+Dash and dodge share the Q key; whether you're moving decides which one fires. They have separate cooldowns. #agreed
 
 ## M1 chain
 - 4-hit chain. The 4th hit is a knockback finisher.

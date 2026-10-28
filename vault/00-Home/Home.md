@@ -25,6 +25,8 @@ The design hub for the game: a public multiplayer Roblox RPG in the Tokyo Ghoul 
 - [[Quinque Design]]
 - [[Progression]]
 - [[Multiplayer and Networking]]
+- [[Origins and Race Paths]]
+- [[Death and Permadeath]]
 
 ## Sources
 - [[Research - RC Cells (AI summary)]]
