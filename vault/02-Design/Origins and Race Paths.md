@@ -3,10 +3,31 @@ tags: [design, agreed]
 ---
 # Origins and Race Paths
 
-**Decision:** every new character starts as an ordinary **human** in Tokyo. What they become is earned in-game through routes that follow the series. #agreed
+**Decision:** each new character **rolls an origin** at creation. Most start human; born two-eyed ghouls are common; one-eyed ghouls are rare and stronger. Humans can still earn other paths in-game. #agreed
 
-## Lore constraint
-In canon, a human can't simply turn into a born ghoul. Humans become ghoul-like only through a **kakuhou transplant**, which makes an artificial one-eyed ghoul like Kaneki (see [[Half-Ghouls and Quinx]]). So player "ghouls" are artificial one-eyed ghouls, which fits: Kaneki is the series' protagonist. #canon
+## Origin roll
+| Origin | Odds (placeholder) | Starts with | Lore |
+|---|---|---|---|
+| **Human** | 60% | Nothing special; can join the CCG or take the Kaneki route | #canon |
+| **Born ghoul (two-eyed)** | 39% | Kagune (rolled type), both eyes show the kakugan, hunger | The normal kind of ghoul #canon |
+| **Natural one-eyed ghoul** | 1% | One-eyed traits from birth (see below) | Born of a human and a ghoul, extremely rare (Eto) #canon |
+
+Humans who take the transplant route become **artificial one-eyed ghouls** (Kaneki). So one-eyed ghouls are rare either way: a 1% birth roll, or a risky transplant.
+
+## Two-eyed vs one-eyed
+| | Two-eyed (born) | One-eyed (natural or artificial) |
+|---|---|---|
+| How common | Common | Rare |
+| RC cap and kagune growth | Normal | Higher cap, faster growth. One-eyed ghouls are naturally stronger. #canon |
+| Stability | Stable; kagune control is reliable from the start | Unstable: when hungry or badly hurt, a **frenzy** risk (brief loss of control) #game-original |
+| Hiding | Kakugan in both eyes, hidden when calm | Single kakugan, harder to hide when stressed #game-original |
+| Food | Human flesh only (coffee and water OK) | Same; artificial one-eyed start with a short adjustment period where hunger is harsher (Kaneki's early arc) #game-original |
+| Social | Accepted among ghouls | Distrusted by some ghouls, hunted harder by the CCG once known #game-original |
+
+Artificial vs natural one-eyed: natural ones start stronger; artificial ones start weaker but have the same high ceiling.
+
+## Lore note
+In canon, a human can't turn into a born two-eyed ghoul. Humans become ghoul-like only through a **kakuhou transplant**, which makes an artificial one-eyed ghoul (see [[Half-Ghouls and Quinx]]). That's why two-eyed ghouls come only from the origin roll. #canon
 
 ## Paths
 
@@ -26,10 +47,14 @@ Alternative trigger to consider: seeking out the doctor on purpose by finding hi
 
 ### 3. Staying human
 - A valid choice: civilians can work, trade, and run the café hub. It's also the starting point for both paths above.
+
+### 4. Born ghoul
+- Starts in a ghoul community (for example a café hub in the series' style) with a rolled kagune at the Unstable stage (see [[Progression]]).
+- Can't join the CCG openly; doing it undercover is a later idea.
 - Humans can't use kagune or quinques, so this is mainly a social or support role.
 
 ## Kagune roll
-- The kagune type is **rolled randomly** at transplant, framed as the type of the donor ghoul's kakuhou. #agreed
+- The kagune type is **rolled randomly**: at character creation for born ghouls, or at transplant (framed as the donor ghoul's kakuhou type) for artificial one-eyed ghouls. #agreed
 - Proposed rarity (placeholder): Bikaku 35%, Koukaku 30%, Ukaku 25%, Rinkaku 10%. Rinkaku is rarest because it's the series' iconic type (Kaneki, Rize).
 - A very rare **chimera** roll (two types) could come later.
 
